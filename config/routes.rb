@@ -4,6 +4,6 @@ if Rails.version < '3.0'
   end
 else # Rails 3
   RedmineApp::Application.routes.draw do
-    match 'parking_lot_chart/:action', :controller => 'parking_lot_chart'
+    match 'parking_lot_chart/:action', :controller => 'parking_lot_chart', via: :get
   end
 end

@@ -51,10 +51,7 @@ class ParkingLotChartController < ApplicationController
       workday_setting = Setting.plugin_redmine_parking_lot_chart['workday_custom_fields']
       if !workday_setting.nil?
         workday_name = CustomField.find_by_id(workday_setting)
-        workday_value = CustomValue.find(:first,
-                                          :select => :value,
-                                          :conditions => ["customized_type = 'Version' AND custom_field_id = ? AND customized_id = ?", workday_setting, version.id]
-                                          )
+        workday_value = CustomValue.find_by(customized_type: 'Version', custom_field_id: workday_setting, customized_id: version.id)
         if !workday_name.nil? and !workday_value.nil? and !workday_value.value.empty?
           data.workday = "#{workday_name.name}:#{workday_value.value}"
         end
@@ -63,10 +60,7 @@ class ParkingLotChartController < ApplicationController
       day_setting = Setting.plugin_redmine_parking_lot_chart['day_custom_fields']
       if !day_setting.nil?
         day_name = CustomField.find_by_id(day_setting)
-        day_value = CustomValue.find(:first,
-                                      :select => :value,
-                                      :conditions => ["customized_type = 'Version' AND custom_field_id = ? AND customized_id = ?", day_setting, version.id]
-                                      )
+        day_value = CustomValue.find_by(customized_type: 'Version', custom_field_id: day_setting, customized_id: version.id)
         if !day_name.nil? and !day_value.nil? and !day_value.value.empty?
           data.day = "#{day_name.name}:#{day_value.value}"
         end
@@ -150,6 +144,6 @@ class ParkingLotChartController < ApplicationController
 
   private
   def find_issues_open_status
-    @open_statuses = IssueStatus.find_all_by_is_closed(false)
+    @open_statuses = IssueStatus.where(is_closed: false)
   end
 end
